@@ -53,7 +53,6 @@ describe('Controller', () => {
     const api            = supertestp('http://localhost:3000');
     const app            = express();
     let server;
-
     
     app.set('view engine', 'ejs');
 
@@ -120,18 +119,10 @@ describe('Controller', () => {
       .expect(200, resultMustBe, done);
     });
 
-    it('controller with locals method', (done) => {
+    it('controller with params method', (done) => {
       const resultMustBe = fs.readFileSync(path.resolve(__dirname, 'controllers/views/with_params.html'), 'utf8');
       app.get('/with_params/:param/:anotherparam', Ctrl.link('with_params'));
       api.get('/with_params/bugs/bunny')
-      .expect(200, resultMustBe, done);
-    });
-
-
-    it('calling controller with locals method', (done) => {
-      const resultMustBe = fs.readFileSync(path.resolve(__dirname, 'controllers/views/existing_view_with_locals.html'), 'utf8');
-      app.get('/existing_view_with_locals', CtrlWithLocals.link('existing_view_with_locals'));
-      api.get('/existing_view_with_locals')
       .expect(200, resultMustBe, done);
     });
 
