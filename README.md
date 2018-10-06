@@ -158,7 +158,6 @@ class MyCtrl {
     this.setView('anotherView'); // render controllers/views/anotherView.ejs
   }
 }
-module.exports = MainCtrl;
 ```
 
 ### Troubles
