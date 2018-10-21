@@ -50,9 +50,8 @@ describe('Controller', () => {
 
     const Ctrl           = new Controller(path.resolve(__dirname, './controllers/valid-controller'));
     const CtrlWithLocals = new Controller(path.resolve(__dirname, './controllers/valid-controller-with-locals-method'));
-    const api            = supertestp('http://localhost:3000');
     const app            = express();
-    let server;
+    let api, server;
     
     app.set('view engine', 'ejs');
 
@@ -67,7 +66,10 @@ describe('Controller', () => {
     }
 
     before((done) => {
-      server = app.listen(3000, done);
+      server = app.listen((err) => {
+        api = supertestp('http://localhost:'+ server.address().port);
+        done(err);
+      });
     });
 
     it('general error', (done) => {
