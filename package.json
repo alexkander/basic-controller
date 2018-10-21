@@ -1,6 +1,6 @@
 {
   "name": "basic-controller",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Basic implemetation of controllers for NodeJS",
   "main": "index.js",
   "scripts": {
