@@ -57,7 +57,7 @@ const OtherController = new Controller('controllers/main/otherContoller.js');
 ```
 
 #### `controller.link(methodName);`
-Make a request handler to link a router to controller method.
+Make a request handler to link a route with a controller method.
 
 ##### Arguments
  Name         | Type      | Description
@@ -113,8 +113,8 @@ app.get('/anotherRoute/:displayName/:province', MyCtrl.link('anotherMethod'));
 #### Render view
 When a request is handler through a controller method, the response will be the
 rendering of a view with the same name of the method in the `views` folder where
-the controller is. The view is rendered with params returned in the called
-method.
+the controller is if this view exists. The view is rendered with params returned
+in the called method.
 
 ##### Example
 
@@ -149,13 +149,55 @@ app.get('/myRoute', MyCtrl.link('myMethod'));
 app.set('view engine', 'ejs'); // Configure view engine
 ```
 
-To render a different view use the `setView` method.
+### controller.setView(view=null)
+Set a view to render.
 
+##### Arguments
+ Name   | Type     | Description
+--------|----------|-------------
+ `view` | `string` | View to render
+
+##### Example
 ```js
 // controllers/mycontroller.js
 class MyCtrl {
   anotherMethod () {
     this.setView('anotherView'); // render controllers/views/anotherView.ejs
+  }
+}
+```
+
+### controller.render(view=null, locals = {})
+
+To force render with `render` method. Is the action method
+return with `render` method call. Also in this case, is view doesn't exists
+an error will throwed.
+
+##### Arguments
+ Name     | Type     | Description
+----------|----------|-------------
+ `view`   | `string` | View to render
+ `locals` | `object` | Locals to render view
+
+##### Example
+```js
+// controllers/mycontroller.js
+class MyCtrl {
+  anotherMethod () {
+    // Render 'anotherView' view.
+    return this.render('anotherView');
+  }
+  amazingMethod () {
+    // Same view 'amazingMethod' with locals
+    return this.render({
+      myVar: 'myValue'
+    });
+  }
+  anotherCustomMethod () {
+    // Same view 'myView' with locals
+    return this.render('myView', {
+      myVar: 'myValue'
+    });
   }
 }
 ```

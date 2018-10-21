@@ -112,11 +112,62 @@ describe('Controller', () => {
       .expect(200, resultMustBe, done);
     });
 
+    it('method force render', (done) => {
+      const resultMustBe = fs.readFileSync(path.resolve(__dirname, 'controllers/views/force_render.html'), 'utf8');
+      app.get('/force_render', Ctrl.link('force_render'));
+      api.get('/force_render')
+      .expect(200, resultMustBe, done);
+    });
+
+    it('method force render with locals', (done) => {
+      const resultMustBe = fs.readFileSync(path.resolve(__dirname, 'controllers/views/force_render_with_locals.html'), 'utf8');
+      app.get('/force_render_with_locals', Ctrl.link('force_render_with_locals'));
+      api.get('/force_render_with_locals')
+      .expect(200, resultMustBe, done);
+    });
+
+    it('method force render with other view', (done) => {
+      const resultMustBe = fs.readFileSync(path.resolve(__dirname, 'controllers/views/force_render.html'), 'utf8');
+      app.get('/force_render_with_other_view', Ctrl.link('force_render_with_other_view'));
+      api.get('/force_render_with_other_view')
+      .expect(200, resultMustBe, done);
+    });
+
     it('method render another existing view', (done) => {
       const resultMustBe = fs.readFileSync(path.resolve(__dirname, 'controllers/views/another_existing_view_to_render.html'), 'utf8');
       app.get('/another_existing_view', Ctrl.link('another_existing_view'));
       api.get('/another_existing_view')
       .expect(200, resultMustBe, done);
+    });
+
+    it('method render with invalid view param', (done) => {
+      app.get('/force_render_with_invalid_view_param', Ctrl.link('force_render_with_invalid_view_param'));
+      likeTest(() => {
+        return api.get('/force_render_with_invalid_view_param')
+        .expect(500)
+        .then(function(res) {
+          assert(res.error.text.indexOf(`Error: invalid view param in controller.render`)!=-1, 'error is not expected error');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+      });
+    });
+
+    it('method render with invalid locals param', (done) => {
+      app.get('/force_render_with_invalid_locals_param', Ctrl.link('force_render_with_invalid_locals_param'));
+      likeTest(() => {
+        return api.get('/force_render_with_invalid_locals_param')
+        .expect(500)
+        .then(function(res) {
+          assert(res.error.text.indexOf(`Error: invalid locals param in controller.render`)!=-1, 'error is not expected error');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+      });
     });
 
     it('controller with params method', (done) => {

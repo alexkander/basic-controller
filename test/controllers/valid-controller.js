@@ -13,6 +13,28 @@ class ValidController{
     return { param, anotherparam, params };
   }
 
+  force_render(){
+    return this.render();
+  }
+
+  force_render_with_locals(){
+    return this.render({
+      name: 'Alex'
+    });
+  }
+
+  force_render_with_other_view(){
+    return this.render('force_render');
+  }
+
+  force_render_with_invalid_view_param(){
+    return this.render(1111);
+  }
+
+  force_render_with_invalid_locals_param(){
+    return this.render('force_render', 111);
+  }
+
   view_with_errors() {
   }
 
