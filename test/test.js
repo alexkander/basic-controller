@@ -31,6 +31,15 @@ describe('Controller', () => {
       }
     });
 
+    it('transform isn\'t a function', () => {
+      try {
+        new Controller(path.resolve(__dirname, './controllers/valid-controller'), {});
+        assert(false, 'a error must be throwed');
+      } catch(e) {
+        expect(e.code).to.equal('INVALID_TRANSFORM');
+      }
+    });
+
     it('normal instance', () => {
       new Controller(path.resolve(__dirname, './controllers/valid-controller'));
     });
