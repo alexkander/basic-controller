@@ -9,20 +9,13 @@ const supertestp = require('supertest-as-promised');
 
 const Controller = require('..');
 
-const createController = (controllerpath, transform) => {
-  controllerpath = path.resolve(__dirname, controllerpath);
-  const viewpath = path.join(path.dirname(controllerpath), '/views');
-  const Ctrl = require(controllerpath);
-  return new Controller(Ctrl, viewpath, transform);
-};
-
 describe('Controller', () => {
 
   describe('new Controller', () => {
 
     it('controller file doesn\'t exists', () => {
       try {
-        createController('./no-existing-controller');
+        Controller.create(path.resolve(__dirname, './no-existing-controller'));
         assert(false, 'a error must be throwed');
       } catch(e) {
         expect(e.code).to.equal('MODULE_NOT_FOUND');
@@ -31,7 +24,7 @@ describe('Controller', () => {
 
     it('controller isn\'t a function', () => {
       try {
-        createController('./controllers/no-function-controller');
+        Controller.create(path.resolve(__dirname, './controllers/no-function-controller'));
         assert(false, 'a error must be throwed');
       } catch(e) {
         expect(e.code).to.equal('INVALID_CONTROLLER');
@@ -40,7 +33,7 @@ describe('Controller', () => {
 
     it('transform isn\'t a function', () => {
       try {
-        createController('./controllers/valid-controller', {});
+        Controller.create(path.resolve(__dirname, './controllers/valid-controller'), 'views', {});
         assert(false, 'a error must be throwed');
       } catch(e) {
         expect(e.code).to.equal('INVALID_TRANSFORM');
@@ -48,7 +41,7 @@ describe('Controller', () => {
     });
 
     it('normal instance', () => {
-      createController('./controllers/valid-controller');
+      Controller.create(path.resolve(__dirname, './controllers/valid-controller'));
     });
 
   });
@@ -56,7 +49,7 @@ describe('Controller', () => {
   describe('link', () => {
 
     it('link method returns a function', () => {
-      const Ctrl = createController('./controllers/valid-controller');
+      const Ctrl = Controller.create(path.resolve(__dirname, './controllers/valid-controller'));
       expect(Ctrl.link('home')).to.be.an('function');
     });
 
@@ -64,8 +57,8 @@ describe('Controller', () => {
 
   describe('calling', () => {
 
-    const Ctrl           = createController('./controllers/valid-controller');
-    const CtrlWithLocals = createController('./controllers/valid-controller-with-locals-method');
+    const Ctrl           = Controller.create(path.resolve(__dirname, './controllers/valid-controller'));
+    const CtrlWithLocals = Controller.create(path.resolve(__dirname, './controllers/valid-controller-with-locals-method'));
     const app            = express();
     let api, server;
     
